@@ -1,6 +1,8 @@
 package co.icesi.edu.model;
 
 import co.icesi.edu.ui.Main;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,10 +18,10 @@ public class InfrastructureDepartament {
         billboards = new ArrayList<>();
         loadBillboard();
 
-        System.out.println("The average of the Width is:" + averageW());
+        System.out.println("\n The average of the Width is:" + averageW());
         System.out.println("The average of the Height is:" + averageH());
         System.out.println("The average of the Areas is:" + averageA());
-        System.out.println("List of brand's quantity: \n" + counterBillXBrand());
+        System.out.println("List of brand's quantity: \n" + counterBillXBrand() + "\n");
     }
 
     public void addBillboard(double w, double h, boolean iu, String b) {
@@ -120,10 +122,15 @@ public class InfrastructureDepartament {
     }
 
     public void importData(String fn){
-        String[] columns = fn.split("\\|");
-        System.out.println(Arrays.toString(columns));
-        Billboard billboard = new Billboard(Double.parseDouble(columns[0]),Double.parseDouble(columns[1]),Boolean.parseBoolean(columns[2]),columns[3]);
-        billboards.add(billboard);
+
+        try {
+            String[] columns = fn.split("\\|");
+            System.out.println(Arrays.toString(columns));
+            Billboard billboard = new Billboard(Double.parseDouble(columns[0]), Double.parseDouble(columns[1]), Boolean.parseBoolean(columns[2]), columns[3]);
+            billboards.add(billboard);
+        } catch (NumberFormatException e){
+            System.out.println("\n error en el formato de numero \n");
+        }
     }
 
     public void printFileContent() throws IOException {
@@ -134,5 +141,10 @@ public class InfrastructureDepartament {
     }
 
     public void searchAndPrintByBrand() throws IOException {
+    }
+
+    public void exportToJson(){
+        Gson encoder = new GsonBuilder().create();
+        String e = encoder.toJson(billboards);
     }
 }
